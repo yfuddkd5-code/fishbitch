@@ -4,70 +4,60 @@ import PixelAxolotl from './PixelAxolotl';
 import PixelIcon from './PixelIcon';
 import FloatingPixels from './FloatingPixels';
 import { toast } from '@/hooks/use-toast';
-
 const WhitelistForm: React.FC = () => {
   const [formData, setFormData] = useState({
     gm_gn: '',
     wallet_address: '',
     twitter_handle: '',
-    reason: '',
+    reason: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!formData.gm_gn || !formData.wallet_address || !formData.twitter_handle || !formData.reason) {
       toast({
         title: "Oops! 🎮",
         description: "Please fill in all the fields, fren!",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     setIsSubmitting(true);
-
     try {
-      const { error } = await supabase
-        .from('whitelist_entries')
-        .insert([{
-          gm_gn: formData.gm_gn.trim(),
-          wallet_address: formData.wallet_address.trim(),
-          twitter_handle: formData.twitter_handle.trim(),
-          reason: formData.reason.trim(),
-        }]);
-
+      const {
+        error
+      } = await supabase.from('whitelist_entries').insert([{
+        gm_gn: formData.gm_gn.trim(),
+        wallet_address: formData.wallet_address.trim(),
+        twitter_handle: formData.twitter_handle.trim(),
+        reason: formData.reason.trim()
+      }]);
       if (error) throw error;
-
       setIsSuccess(true);
       toast({
         title: "WAGMI! 🎉",
-        description: "You're on the list, fren!",
+        description: "You're on the list, fren!"
       });
     } catch (error) {
       console.error('Error submitting:', error);
       toast({
         title: "Error! 😢",
         description: "Something went wrong. Try again!",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
   if (isSuccess) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 relative">
+    return <div className="min-h-screen flex items-center justify-center p-4 relative">
         <FloatingPixels />
         <div className="pixel-card max-w-md w-full text-center relative z-10">
           <div className="flex justify-center mb-6">
@@ -84,16 +74,17 @@ const WhitelistForm: React.FC = () => {
           </p>
           <div className="flex justify-center gap-2">
             <PixelIcon type="heart" size={24} className="text-primary pixel-pulse" />
-            <PixelIcon type="star" size={24} className="text-accent pixel-pulse" style={{ animationDelay: '0.2s' } as React.CSSProperties} />
-            <PixelIcon type="heart" size={24} className="text-primary pixel-pulse" style={{ animationDelay: '0.4s' } as React.CSSProperties} />
+            <PixelIcon type="star" size={24} className="text-accent pixel-pulse" style={{
+            animationDelay: '0.2s'
+          } as React.CSSProperties} />
+            <PixelIcon type="heart" size={24} className="text-primary pixel-pulse" style={{
+            animationDelay: '0.4s'
+          } as React.CSSProperties} />
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative">
+  return <div className="min-h-screen flex items-center justify-center p-4 relative">
       <FloatingPixels />
       
       <div className="pixel-card max-w-lg w-full relative z-10">
@@ -117,14 +108,7 @@ const WhitelistForm: React.FC = () => {
               <PixelIcon type="chat" size={18} className="text-primary" />
               Say GM / GN
             </label>
-            <input
-              type="text"
-              name="gm_gn"
-              value={formData.gm_gn}
-              onChange={handleChange}
-              placeholder="GM fren! ☀️"
-              className="pixel-input"
-            />
+            <input type="text" name="gm_gn" value={formData.gm_gn} onChange={handleChange} placeholder="GM fren! ☀️" className="pixel-input" />
           </div>
 
           {/* Wallet Address */}
@@ -133,14 +117,7 @@ const WhitelistForm: React.FC = () => {
               <PixelIcon type="wallet" size={18} className="text-primary" />
               Wallet Address
             </label>
-            <input
-              type="text"
-              name="wallet_address"
-              value={formData.wallet_address}
-              onChange={handleChange}
-              placeholder="0x..."
-              className="pixel-input"
-            />
+            <input type="text" name="wallet_address" value={formData.wallet_address} onChange={handleChange} placeholder="0x..." className="pixel-input" />
           </div>
 
           {/* Twitter Handle */}
@@ -149,14 +126,7 @@ const WhitelistForm: React.FC = () => {
               <PixelIcon type="twitter" size={18} className="text-primary" />
               X (Twitter) Handle
             </label>
-            <input
-              type="text"
-              name="twitter_handle"
-              value={formData.twitter_handle}
-              onChange={handleChange}
-              placeholder="@your_handle"
-              className="pixel-input"
-            />
+            <input type="text" name="twitter_handle" value={formData.twitter_handle} onChange={handleChange} placeholder="@your_handle" className="pixel-input" />
           </div>
 
           {/* Reason */}
@@ -165,49 +135,27 @@ const WhitelistForm: React.FC = () => {
               <PixelIcon type="heart" size={18} className="text-primary" />
               Why do you want this whitelist?
             </label>
-            <textarea
-              name="reason"
-              value={formData.reason}
-              onChange={handleChange}
-              placeholder="Tell us why you're bullish on POKI! 🚀"
-              rows={4}
-              className="pixel-input resize-none"
-            />
+            <textarea name="reason" value={formData.reason} onChange={handleChange} placeholder="Tell us why you're bullish on POKI! 🚀" rows={4} className="pixel-input resize-none" />
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="pixel-button w-full flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <>
+          <button type="submit" disabled={isSubmitting} className="pixel-button w-full flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+            {isSubmitting ? <>
                 <PixelAxolotl size={24} variant="excited" className="pixel-wiggle" />
                 <span>SUBMITTING...</span>
-              </>
-            ) : (
-              <>
+              </> : <>
                 <PixelIcon type="star" size={20} className="text-primary-foreground" />
                 <span>JOIN THE FAM</span>
                 <PixelIcon type="star" size={20} className="text-primary-foreground" />
-              </>
-            )}
+              </>}
           </button>
         </form>
 
         {/* Footer link to admin */}
         <div className="mt-6 text-center">
-          <a 
-            href="/admin" 
-            className="font-pixel-body text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            Admin? Click here 🔒
-          </a>
+          
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default WhitelistForm;
